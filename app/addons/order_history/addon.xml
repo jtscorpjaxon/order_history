@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<!--
+    Описание схемы аддона версии 3.0
+    Все параметры не отмеченные как необязательные должны быть определены в схеме.
+    @edition_type - Необязательный атрибут, доступный для любого элемента, связанного с настройками. Определяет редакции, в которых доступна та или иная настройка. Берётся либо значение текущего узла, либо родителя, либо ROOT (если вообще ничего нет).
+-->
+<addon scheme="3.0" edition_type="ROOT,ULT:VENDOR">
+    <!-- Идентификатор аддона; должен быть равен имени каталога, в котором лежит аддон. -->
+    <id>order_history</id>
+    <!-- Версия аддона -->
+    <version>1.0</version>
+    <!-- Родной язык аддона (по умолчанию). Необязательный параметр; если не указан, то язык будет распознаваться как английский (EN). -->
+    <default_language>en</default_language>
+    <!-- Приоритет аддона. Чем выше, тем позже аддон подключается. -->
+    <priority>1000</priority>
+    <!-- Статус, который будет выставлен после установки аддона (active/disabled). По умолчанию disabled. -->
+    <status>active</status>
+     <default_language>en</default_language>
+
+
+
+    <!-- Дополнительные запросы к базе данных-->
+    <queries>
+
+        <!-- Если параметр for="install" или его вообще нет - запрос выполняется во время установки аддона-->
+        <item for="install">
+            CREATE TABLE IF NOT EXISTS `?:order_history` (
+            `ID` mediumint NOT NULL auto_increment,
+            `order_id` mediumint(8) unsigned NOT NULL default '0',
+            `old_status` char(1) NOT NULL default '',
+            `new_status` char(1) NOT NULL default '',
+            `user_id` mediumint(8) unsigned NOT NULL default '0',
+            `timestamp` int(11) unsigned NOT NULL default '0',
+            PRIMARY KEY (ID)
+            ) ENGINE=MyISAM DEFAULT CHARSET=UTF8;
+        </item>
+
+        <!-- Если параметр for="uninstall", запрос выполняется во время удаления аддона-->
+        <item for="uninstall">DROP TABLE IF EXISTS `?:order_history`</item>
+
+       
+    </queries>
+    <!-- Пользовательские функции, вызывающиеся при наступлении определённых событий
+            before_install - перед установкой аддона.
+            install - после установки аддона, его шаблонов, настроек, языковых переменных, но перед его активацией и очисткой кэша
+            uninstall - перед удалением
+            -->
+ 
+</addon>
